@@ -176,7 +176,6 @@ func convertEvalDelta(evalDelta types.EvalDelta) types.EvalDelta {
 	evalDelta.GlobalDelta = convertStateDelta(evalDelta.GlobalDelta)
 	evalDelta.LocalDeltas = convertLocalDeltas(evalDelta.LocalDeltas)
 	return evalDelta
->>>>>>> 6f0ebc2 (Delete Null characters from Logs (#739))
 }
 
 func convertSignedTxnWithAD(stxn transactions.SignedTxnWithAD) signedTxnWithAD {
