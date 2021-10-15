@@ -140,12 +140,6 @@ func convertLocalDeltas(deltas map[uint64]basics.StateDelta) map[uint64]stateDel
 	return res
 }
 
-func convertEvalDelta(delta transactions.EvalDelta) evalDelta {
-	return evalDelta{
-		EvalDelta:           delta,
-		GlobalDeltaOverride: convertStateDelta(delta.GlobalDelta),
-		LocalDeltasOverride: convertLocalDeltas(delta.LocalDeltas),
-	}
 // printableUTF8OrEmpty checks to see if the entire string is a UTF8 printable string.
 // If this is the case, the string is returned as is. Otherwise, the empty string is returned.
 func printableUTF8OrEmpty(in string) string {
@@ -171,11 +165,13 @@ func removeNonUTF8Chars(logs []string) []string {
 	return res
 }
 
-func convertEvalDelta(evalDelta types.EvalDelta) types.EvalDelta {
-	evalDelta.Logs = removeNonUTF8Chars(evalDelta.Logs)
-	evalDelta.GlobalDelta = convertStateDelta(evalDelta.GlobalDelta)
-	evalDelta.LocalDeltas = convertLocalDeltas(evalDelta.LocalDeltas)
-	return evalDelta
+func convertEvalDelta(delta transactions.EvalDelta) evalDelta {
+	delta.Logs = removeNonUTF8Chars(delta.Logs)
+	return evalDelta{
+		EvalDelta:           delta,
+		GlobalDeltaOverride: convertStateDelta(delta.GlobalDelta),
+		LocalDeltasOverride: convertLocalDeltas(delta.LocalDeltas),
+	}
 }
 
 func convertSignedTxnWithAD(stxn transactions.SignedTxnWithAD) signedTxnWithAD {
