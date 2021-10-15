@@ -2,6 +2,8 @@ package encoding
 
 import (
 	"encoding/base64"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/algorand/go-algorand/crypto"
 	"github.com/algorand/go-algorand/data/basics"
@@ -144,6 +146,37 @@ func convertEvalDelta(delta transactions.EvalDelta) evalDelta {
 		GlobalDeltaOverride: convertStateDelta(delta.GlobalDelta),
 		LocalDeltasOverride: convertLocalDeltas(delta.LocalDeltas),
 	}
+// printableUTF8OrEmpty checks to see if the entire string is a UTF8 printable string.
+// If this is the case, the string is returned as is. Otherwise, the empty string is returned.
+func printableUTF8OrEmpty(in string) string {
+	// iterate throughout all the characters in the string to see if they are all printable.
+	// when range iterating on go strings, go decode each element as a utf8 rune.
+	for _, c := range in {
+		// is this a printable character, or invalid rune ?
+		if c == utf8.RuneError || !unicode.IsPrint(c) {
+			return ""
+		}
+	}
+	return in
+}
+
+func removeNonUTF8Chars(logs []string) []string {
+	if logs == nil {
+		return nil
+	}
+	res := make([]string, len(logs))
+	for i, log := range logs {
+		res[i] = printableUTF8OrEmpty(log)
+	}
+	return res
+}
+
+func convertEvalDelta(evalDelta types.EvalDelta) types.EvalDelta {
+	evalDelta.Logs = removeNonUTF8Chars(evalDelta.Logs)
+	evalDelta.GlobalDelta = convertStateDelta(evalDelta.GlobalDelta)
+	evalDelta.LocalDeltas = convertLocalDeltas(evalDelta.LocalDeltas)
+	return evalDelta
+>>>>>>> 6f0ebc2 (Delete Null characters from Logs (#739))
 }
 
 func convertSignedTxnWithAD(stxn transactions.SignedTxnWithAD) signedTxnWithAD {
