@@ -1,4 +1,11 @@
 [![Build Status](https://travis-ci.com/algorand/indexer.svg?branch=master)](https://travis-ci.com/algorand/indexer)
+
+# Fork of Indexer
+
+This is a fork of the Algorand indexer for the purposes of building a non-test indexer docker image.
+
+Original README file follows:
+
 # Algorand Indexer
 
 The Indexer is a standalone service that reads committed blocks from the Algorand blockchain and maintains a database of transactions and accounts that are searchable and indexed.
