@@ -4,6 +4,8 @@
 
 This is a fork of the Algorand indexer for the purposes of building a non-test indexer docker image.
 
+Docker image: https://hub.docker.com/repository/docker/rcodesmith/algorand-indexer
+
 Original README file follows:
 
 # Algorand Indexer
